@@ -1,0 +1,5 @@
+.env
+.localstack
+.terraform*
+terraform.tfstate*
+.terragrunt-cache
