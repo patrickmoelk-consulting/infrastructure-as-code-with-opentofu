@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-profile=opentofu-workshop-dummy
+profile=opentofu-workshop
 
 function upload_file() {
 	bucket="$1"

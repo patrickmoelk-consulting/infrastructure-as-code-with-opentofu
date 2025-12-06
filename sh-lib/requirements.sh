@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-profile=opentofu-workshop-dummy
+profile=opentofu-workshop
 
 function check_aws_cli() {
 	if [[ ! $(which aws) ]]; then
