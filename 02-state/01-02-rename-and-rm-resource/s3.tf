@@ -8,8 +8,4 @@ data "local_command" "name" {
 
 resource "aws_s3_bucket" "my_buckt" {
   bucket = local.bucket_name
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
