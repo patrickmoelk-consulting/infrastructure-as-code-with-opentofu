@@ -5,7 +5,7 @@ services:
     ports:
       - "4563-4599:4563-4599"
     environment:
-      - SERVICES=s3
+      - SERVICES=s3,sts
       - DEBUG=1
       - DATA_DIR=/var/lib/localstack/data
     volumes:
