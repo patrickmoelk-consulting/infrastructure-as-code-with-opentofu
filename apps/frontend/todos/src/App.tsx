@@ -1,10 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import reactLogo from "./assets/react.svg";
+import { Configuration, DefaultApi } from "./libs/api-clients/generated";
+import viteLogo from "/vite.svg";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [responseText, setResponseText] = useState("");
+  const host = window.location.host;
+
+  useEffect(() => {
+    async function fetchData() {
+      const config = host.endsWith("9999")
+        ? new Configuration()
+        : new Configuration({ basePath: "http://localhost:8000/api" });
+      const api = new DefaultApi(config);
+      const response = await api.getRootGet();
+      console.log({ response });
+      if (count) {
+        setResponseText(response);
+      }
+    }
+
+    fetchData();
+  }, [count, host]);
 
   return (
     <>
@@ -28,8 +47,10 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <p>Response: {responseText}</p>
+      <p>Host: {host}</p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
