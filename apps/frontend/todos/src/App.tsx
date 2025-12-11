@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import reactLogo from "./assets/react.svg";
-import { Configuration, DefaultApi } from "./libs/api-clients/generated";
+import { DefaultApi } from "./libs/api-clients/generated";
 import viteLogo from "/vite.svg";
 
 function App() {
@@ -11,10 +11,7 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const config = host.endsWith("9999")
-        ? new Configuration()
-        : new Configuration({ basePath: "http://localhost:8000/api" });
-      const api = new DefaultApi(config);
+      const api = new DefaultApi();
       const response = await api.getRootGet();
       console.log({ response });
       if (count) {

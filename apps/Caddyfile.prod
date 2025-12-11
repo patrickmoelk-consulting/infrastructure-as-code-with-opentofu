@@ -1,0 +1,13 @@
+:80 {
+  encode
+
+  handle /api* {
+    reverse_proxy localhost:8000
+  }
+
+  handle {
+    root * /srv/todo-list-app-frontend
+    try_files {path} /index.html
+    file_server
+  }
+}

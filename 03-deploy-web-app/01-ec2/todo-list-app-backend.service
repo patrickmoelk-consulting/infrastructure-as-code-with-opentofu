@@ -1,0 +1,15 @@
+[Unit]
+Description=Todo List App Backend
+After=network.target multi-user.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/apps/todos/backend
+ExecStart=/home/ubuntu/.local/bin/poetry run fastapi run src/todos/main.py
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=todo-list-app-backend
+
+[Install]
+WantedBy=multi-user.target
