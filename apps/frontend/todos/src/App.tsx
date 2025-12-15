@@ -1,52 +1,140 @@
-import { useEffect, useState } from "react";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState, type FormEventHandler } from "react";
 import "./App.css";
-import reactLogo from "./assets/react.svg";
-import { DefaultApi } from "./libs/api-clients/generated";
-import viteLogo from "/vite.svg";
+import { TODOsApi, type Todo } from "./libs/api-clients/generated";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [responseText, setResponseText] = useState("");
-  const host = window.location.host;
+  return <TodoList />;
+}
+
+function useTodos(): [Todo[], (todos: Todo[]) => void] {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  function setTodosOrdered(todos: Todo[]): void {
+    const ordered = todos.sort((a, b) => a.id - b.id);
+    setTodos(ordered);
+  }
+
+  return [todos, setTodosOrdered];
+}
+
+function TodoList() {
+  const [todos, setTodos] = useTodos();
+
+  async function fetchTodos() {
+    const api = new TODOsApi();
+    return api.getTodosTodosGet();
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      const api = new DefaultApi();
-      const response = await api.getRootGet();
-      console.log({ response });
-      if (count) {
-        setResponseText(response);
-      }
+    async function fetchAndSetTodos() {
+      const todos = await fetchTodos();
+      setTodos(todos);
     }
 
-    fetchData();
-  }, [count, host]);
+    fetchAndSetTodos();
+  }, []);
+
+  async function addTodo(todo: string): Promise<void> {
+    if (!todo) return;
+
+    const api = new TODOsApi();
+    await api.createOneTodosPost({ createTodo: { todo, completed: false } });
+
+    const todos = await fetchTodos();
+    setTodos(todos);
+  }
+
+  async function deleteTodo(id: number): Promise<void> {
+    const api = new TODOsApi();
+    await api.deleteOneTodosIdDelete({ id });
+
+    const todos = await fetchTodos();
+    setTodos(todos);
+  }
+
+  async function updateTodo(todo: Todo): Promise<void> {
+    const api = new TODOsApi();
+    await api.updateOneTodosIdPatch({ id: todo.id, updateTodo: todo });
+
+    const todos = await fetchTodos();
+    setTodos(todos);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <p>Response: {responseText}</p>
-      <p>Host: {host}</p>
-    </>
+    <div className="todo-list">
+      <h2>TODO List</h2>
+      <ul>
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onDelete={deleteTodo}
+            onUpdate={updateTodo}
+          />
+        ))}
+        <li>
+          <NewTodo submitTodo={addTodo} />
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+type TodoItemProps = {
+  todo: Todo;
+  onDelete: (id: Todo["id"]) => Promise<void>;
+  onUpdate: (todo: Todo) => Promise<void>;
+};
+
+function TodoItem({ todo, onDelete, onUpdate }: TodoItemProps) {
+  return (
+    <li key={todo.id}>
+      <span>
+        <input
+          id={`todo-${todo.id}`}
+          type="checkbox"
+          defaultChecked={todo.completed}
+          onChange={(e) =>
+            onUpdate({ ...todo, completed: e.currentTarget.checked })
+          }
+        />{" "}
+        <label htmlFor={`todo-${todo.id}`}>{todo.todo}</label>
+      </span>
+      <button className="trash" onClick={() => onDelete(todo.id)}>
+        <TrashIcon color="red" width={24} />
+      </button>
+    </li>
+  );
+}
+
+type NewTodoProps = {
+  submitTodo: (todo: string) => Promise<void>;
+};
+
+function NewTodo({ submitTodo }: NewTodoProps) {
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    const todo = e.currentTarget["todo"].value;
+    if (!todo) return;
+
+    submitTodo(todo);
+
+    e.currentTarget["todo"].value = "";
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        type="text"
+        name="todo"
+        placeholder="new todo"
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.currentTarget.value = "";
+        }}
+      />
+    </form>
   );
 }
 
