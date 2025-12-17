@@ -1,180 +1,159 @@
 #!/usr/bin/env bash
 
-echo "================================================"
-echo "running apt update"
-echo "================================================"
+function main() {
+  apt_update_and_upgrade
 
-sudo apt update
+  # install_nvm_and_nodejs
+  install_pyenv
+  install_poetry
+  install_reverse_proxy_caddy
 
-echo "================================================"
-echo "DONE running apt update"
-echo "================================================"
+  install_backend_dependencies
 
+  setup_backend_service
+  setup_frontend_with_caddy
+}
 
+function apt_update_and_upgrade() {
+  print_banner "running apt update..."
+  sudo apt update
+  print_banner "DONE running apt update"
 
-echo "================================================"
-echo "running apt upgrade"
-echo "================================================"
-
-sudo NEEDRESTART_MODE=a apt upgrade -y
-
-echo "================================================"
-echo "DONE running apt upgrade"
-echo "================================================"
-
-
-
-## installing nvm and nodejs
-# echo "================================================"
-# echo "installing nvm"
-# echo "================================================"
-# ## from: https://nodejs.org/en/download
-# # Download and install nvm:
-# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-
-# # in lieu of restarting the shell
-# \. "$HOME/.nvm/nvm.sh"
-
-# echo "================================================"
-# echo "DONE installing nvm"
-# echo "================================================"
-
-# echo "================================================"
-# echo "installing nodejs v24"
-# echo "================================================"
-# # Download and install Node.js:
-# nvm install 24
-
-# # Verify the Node.js version:
-# node -v # Should print "v24.12.0".
-
-# # Verify npm version:
-# npm -v # Should print "11.6.2".
-
-# echo "================================================"
-# echo "DONE installing nodejs v24"
-# echo "================================================"
+  print_banner "running apt upgrade..."
+  sudo NEEDRESTART_MODE=a apt upgrade -y
+  print_banner "DONE running apt upgrade"
+}
 
 
+function install_nvm_and_nodejs() {
+  print_banner "installing nvm..."
 
-## install pyenv
-echo "================================================"
-echo "installing pyenv"
-echo "================================================"
+  ## from: https://nodejs.org/en/download
+  # Download and install nvm:
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
-curl https://pyenv.run | bash
+  # in lieu of restarting the shell
+  \. "$HOME/.nvm/nvm.sh"
 
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
-
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
-echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
-echo 'eval "$(pyenv init - bash)"' >> ~/.profile
-
-echo "================================================"
-echo "DONE installing pyenv"
-echo "================================================"
-
-## install poetry
-echo "================================================"
-echo "installing poetry"
-echo "================================================"
-
-curl -sSL https://install.python-poetry.org | python3 -
-echo 'export PATH="/home/ubuntu/.local/bin:$PATH"' >> ~/.bashrc
-echo 'export PATH="/home/ubuntu/.local/bin:$PATH"' >> ~/.profile
-
-source ~/.bashrc
-
-echo "================================================"
-echo "DONE installing poetry"
-echo "================================================"
+  print_banner "DONE installing nvm"
 
 
-## install reverse proxy: caddy
-echo "================================================"
-echo "installing caddy"
-echo "================================================"
+  print_banner "installing nodejs v24..."
 
-# from https://caddyserver.com/docs/install#debian-ubuntu-raspbian
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-chmod o+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-chmod o+r /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt install caddy
+  # Download and install Node.js:
+  nvm install 24
 
-echo "================================================"
-echo "DONE installing caddy"
-echo "================================================"
+  # Verify the Node.js version:
+  node -v # Should print "v24.12.0".
+
+  # Verify npm version:
+  npm -v # Should print "11.6.2".
+
+  print_banner "DONE installing nodejs v24"
+}
 
 
-## installing backend deps
-echo "================================================"
-echo "installing backend deps"
-echo "================================================"
+function install_pyenv() {
+  print_banner "installing pyenv..."
 
-cd /home/ubuntu/apps/todos/backend
-/home/ubuntu/.local/bin/poetry install
+  curl https://pyenv.run | bash
 
-echo "================================================"
-echo "DONE installing backend deps"
-echo "================================================"
+  echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+  echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+  echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
 
-## create environment variable file at /etc/todo-list-app-backend.env
-## specify variables: VARIABLE=value
-echo "================================================"
-echo "copying .env file to /etc/"
-echo "================================================"
+  echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
+  echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
+  echo 'eval "$(pyenv init - bash)"' >> ~/.profile
 
-sudo cp /home/ubuntu/apps/todos/backend/.env.prod /etc/todo-list-app-backend.env
-sudo chmod 600 /etc/todo-list-app-backend.env
-sudo chown ubuntu:ubuntu /etc/todo-list-app-backend.env
+  print_banner "DONE installing pyenv"
+}
 
-echo "================================================"
-echo "DONE copying .env file to /etc/"
-echo "================================================"
+function install_poetry() {
+  print_banner "installing poetry..."
+
+  curl -sSL https://install.python-poetry.org | python3 -
+  echo 'export PATH="/home/ubuntu/.local/bin:$PATH"' >> ~/.bashrc
+  echo 'export PATH="/home/ubuntu/.local/bin:$PATH"' >> ~/.profile
+
+  source ~/.bashrc
+
+  print_banner "DONE installing poetry"
+}
+
+function install_reverse_proxy_caddy() {
+  print_banner "installing caddy..."
+
+  # from https://caddyserver.com/docs/install#debian-ubuntu-raspbian
+  sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+  chmod o+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  chmod o+r /etc/apt/sources.list.d/caddy-stable.list
+  sudo apt update
+  sudo apt install caddy
+
+  print_banner "DONE installing caddy"
+}
+
+function install_backend_dependencies() {
+  print_banner "installing backend deps..."
+
+  cd /home/ubuntu/apps/todos/backend
+  /home/ubuntu/.local/bin/poetry install
+
+  print_banner "DONE installing backend deps"
+}
+
+function setup_backend_service() {
+  print_banner "copying .env file to /etc/"
+
+  sudo cp /home/ubuntu/apps/todos/backend/.env.prod /etc/todo-list-app-backend.env
+  sudo chmod 600 /etc/todo-list-app-backend.env
+  sudo chown ubuntu:ubuntu /etc/todo-list-app-backend.env
+
+  print_banner "DONE copying .env file to /etc/"
 
 
-## systemd
-echo "================================================"
-echo "setting up backend service"
-echo "================================================"
+  ## systemd
+  print_banner "setting up backend service..."
 
-sudo cp /home/ubuntu/apps/todos/todo-list-app-backend.service /etc/systemd/system
-chmod +x /home/ubuntu/apps/todos/backend/start.sh
+  sudo cp /home/ubuntu/apps/todos/todo-list-app-backend.service /etc/systemd/system
+  chmod +x /home/ubuntu/apps/todos/backend/start.sh
 
-sudo systemctl daemon-reload
-sudo systemctl enable todo-list-app-backend.service
-sudo systemctl start todo-list-app-backend.service
+  sudo systemctl daemon-reload
+  sudo systemctl enable todo-list-app-backend.service
+  sudo systemctl start todo-list-app-backend.service
 
-echo "================================================"
-echo "DONE setting up backend service"
-echo "================================================"
+  print_banner "DONE setting up backend service"
+}
 
 
-## setting up frontend with caddy
-echo "================================================"
-echo "copying frontend and Caddyfile"
-echo "================================================"
+function setup_frontend_with_caddy() {
+  print_banner "copying frontend and Caddyfile..."
 
-sudo cp -r /home/ubuntu/apps/todos/frontend /srv/todo-list-app-frontend
-sudo cp /home/ubuntu/apps/todos/Caddyfile /etc/caddy/Caddyfile
+  sudo cp -r /home/ubuntu/apps/todos/frontend /srv/todo-list-app-frontend
+  sudo cp /home/ubuntu/apps/todos/Caddyfile /etc/caddy/Caddyfile
 
-echo "================================================"
-echo "DONE copying frontend and Caddyfile"
-echo "================================================"
+  print_banner "DONE copying frontend and Caddyfile"
 
 
-## restart caddy
-echo "================================================"
-echo "restarting caddy"
-echo "================================================"
+  ## restart caddy
+  print_banner "restarting caddy..."
 
-sudo systemctl restart caddy
+  sudo systemctl restart caddy
 
-echo "================================================"
-echo "DONE restarting caddy"
-echo "================================================"
+  print_banner "DONE restarting caddy"
+}
+
+
+function print_banner() {
+  text=$1
+
+  echo "================================================"
+  echo "${text}"
+  echo "================================================"
+}
+
+
+main
