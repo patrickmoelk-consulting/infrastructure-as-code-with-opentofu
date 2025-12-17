@@ -76,5 +76,5 @@ resource "aws_key_pair" "todo-list" {
 }
 
 data "local_file" "todo-list-public-key" {
-  filename = "/Users/patrick/.ssh/aws-iac-workshop.ed25519.pub"
+  filename = var.ec2_public_key_local_filepath
 }

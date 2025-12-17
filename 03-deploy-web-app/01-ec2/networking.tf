@@ -3,7 +3,7 @@ data "aws_vpc" "default" {
 }
 
 data "aws_subnets" "default" {
-  region = "eu-central-1"
+  region = var.aws_region
 }
 
 

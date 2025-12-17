@@ -12,6 +12,26 @@ variable "aws_ec2_instance_type" {
   default = "t2.micro"
 }
 
+variable "ec2_public_key_local_filepath" {
+  type = string
+}
+
+
+variable "db_instance_class" {
+  default = "db.t3.micro"
+}
+
+variable "db_engine" {
+  default = "postgres"
+}
+
+variable "db_engine_version" {
+  default = "17.6"
+}
+
+variable "db_name" {
+  default = "todos"
+}
 
 variable "db_username" {
   default = "postgres"
@@ -19,4 +39,12 @@ variable "db_username" {
 
 variable "db_password" {
   type = string
+}
+
+variable "db_storage_in_GiB" {
+  default = 10
+}
+
+variable "db_storage_type" {
+  default = "gp2"
 }
