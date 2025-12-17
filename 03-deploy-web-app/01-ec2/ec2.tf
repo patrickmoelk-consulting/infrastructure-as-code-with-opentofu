@@ -22,6 +22,22 @@ resource "aws_spot_instance_request" "todo-list-app" {
   }
 
   provisioner "file" {
+    content = templatefile("${path.module}/../../apps/backend/todos/.env.prod.tftpl", {
+      db_host     = aws_db_instance.todos.address
+      db_port     = aws_db_instance.todos.port
+      db_name     = aws_db_instance.todos.db_name
+      db_user     = aws_db_instance.todos.username
+      db_password = aws_db_instance.todos.password
+    })
+    destination = "/home/ubuntu/apps/todos/backend/.env.prod"
+  }
+
+  provisioner "local-exec" {
+    working_dir = "${path.module}/../../apps/frontend/todos"
+    command     = "npm run build"
+  }
+
+  provisioner "file" {
     source      = "${path.module}/../../apps/frontend/todos/dist"
     destination = "/home/ubuntu/apps/todos/frontend"
   }
@@ -118,15 +134,6 @@ resource "aws_key_pair" "todo-list" {
   public_key = data.local_file.todo-list-public-key.content
 }
 
-data "aws_vpc" "default" {
-  default = true
-}
-
 data "local_file" "todo-list-public-key" {
   filename = "/Users/patrick/.ssh/aws-iac-workshop.ed25519.pub"
 }
-
-data "local_file" "todo-list-private-key" {
-  filename = "/Users/patrick/.ssh/aws-iac-workshop.ed25519"
-}
-

@@ -118,7 +118,6 @@ echo "================================================"
 
 cd /home/ubuntu/apps/todos/backend
 /home/ubuntu/.local/bin/poetry install
-# poetry run fastapi dev src/todos/main.py
 
 echo "================================================"
 echo "DONE installing backend deps"
@@ -126,8 +125,17 @@ echo "================================================"
 
 ## create environment variable file at /etc/todo-list-app-backend.env
 ## specify variables: VARIABLE=value
-# sudo chmod 600 /etc/todo-list-app-backend.env
-# sudo chown ubuntu:ubuntu /etc/todo-list-app-backend.env
+echo "================================================"
+echo "copying .env file to /etc/"
+echo "================================================"
+
+sudo cp /home/ubuntu/apps/todos/backend/.env.prod /etc/todo-list-app-backend.env
+sudo chmod 600 /etc/todo-list-app-backend.env
+sudo chown ubuntu:ubuntu /etc/todo-list-app-backend.env
+
+echo "================================================"
+echo "DONE copying .env file to /etc/"
+echo "================================================"
 
 
 ## systemd
@@ -136,6 +144,7 @@ echo "setting up backend service"
 echo "================================================"
 
 sudo cp /home/ubuntu/apps/todos/todo-list-app-backend.service /etc/systemd/system
+chmod +x /home/ubuntu/apps/todos/backend/start.sh
 
 sudo systemctl daemon-reload
 sudo systemctl enable todo-list-app-backend.service

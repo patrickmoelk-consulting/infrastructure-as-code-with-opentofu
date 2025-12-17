@@ -11,3 +11,12 @@ variable "aws_ec2_ami" {
 variable "aws_ec2_instance_type" {
   default = "t2.micro"
 }
+
+
+variable "db_username" {
+  default = "postgres"
+}
+
+variable "db_password" {
+  type = string
+}
