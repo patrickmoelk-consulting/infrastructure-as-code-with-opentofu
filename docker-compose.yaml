@@ -16,8 +16,8 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./apps/backend/todos/app-db-data:/var/lib/postgresql/data/pgdata
+      - ./apps/todos/backend-py/app-db-data:/var/lib/postgresql/data/pgdata
     env_file:
-      - ./apps/backend/todos/.env
+      - ./apps/todos/backend-py/.env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata

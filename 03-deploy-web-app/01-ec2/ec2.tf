@@ -5,9 +5,9 @@ locals {
   remote_backend_path  = "${local.remote_home_dir}/apps/todos/backend"
   remote_frontend_path = "${local.remote_home_dir}/apps/todos/frontend"
 
-  local_app_path      = "${path.module}/../../apps"
-  local_backend_path  = "${path.module}/../../apps/backend/todos"
-  local_frontend_path = "${path.module}/../../apps/frontend/todos"
+  local_app_path      = "${path.module}/../../apps/todos"
+  local_backend_path  = "${path.module}/../../apps/todos/backend-py"
+  local_frontend_path = "${path.module}/../../apps/todos/frontend"
 }
 
 
@@ -61,7 +61,7 @@ resource "aws_spot_instance_request" "todo-list-app" {
   }
 
   provisioner "file" {
-    source = templatefile("${local.local_app_path}/Caddyfile.prod.tftpl", {
+    content = templatefile("${local.local_app_path}/Caddyfile.prod.tftpl", {
       backend_host = "localhost"
     })
     destination = "${local.remote_app_path}/Caddyfile"

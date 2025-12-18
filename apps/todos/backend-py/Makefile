@@ -1,3 +1,7 @@
+.PHONY: run-dev
+run-dev:
+	poetry run dotenv run fastapi dev src/todos/main.py
+
 .PHONY: migrations-generate
 migrations-generate:
 	echo "Enter migration message:"; read migration_name; echo $$migration_name > migration_name.txt
