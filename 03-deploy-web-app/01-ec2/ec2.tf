@@ -56,17 +56,19 @@ resource "aws_spot_instance_request" "todo-list-app" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/todo-list-app-backend.service"
+    source      = "${path.module}/assets/todo-list-app-backend.service"
     destination = "${local.remote_app_path}/todo-list-app-backend.service"
   }
 
   provisioner "file" {
-    source      = "${local.local_app_path}/Caddyfile.prod"
+    source = templatefile("${local.local_app_path}/Caddyfile.prod.tftpl", {
+      backend_host = "localhost"
+    })
     destination = "${local.remote_app_path}/Caddyfile"
   }
 
   provisioner "remote-exec" {
-    script = "${path.module}/init-script.sh"
+    script = "${path.module}/assets/init-script.sh"
   }
 }
 
