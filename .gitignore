@@ -1,5 +1,6 @@
 .env
 .localstack
+.secrets.tfvars
 .terraform*
 terraform.tfstate*
 .terragrunt-cache
