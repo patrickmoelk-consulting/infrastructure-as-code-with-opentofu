@@ -18,11 +18,6 @@ remote_state {
     region       = "${local.aws_region}"
     encrypt      = true
     use_lockfile = true
-    encrypt      = true
-
-    # endpoints = {
-    #   s3 = "http://s3.localhost.localstack.cloud:4566"
-    # }
   }
 }
 

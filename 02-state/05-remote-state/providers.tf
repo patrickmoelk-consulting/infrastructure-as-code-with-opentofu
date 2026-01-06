@@ -9,22 +9,27 @@ terraform {
   backend "s3" {
     region       = "eu-central-1"
     bucket       = "iac-workshop-bucket-02-05-NAME-state"
-    key          = "opentofu-state"
+    key          = "tofu.tfstate"
+    encrypt      = true
     use_lockfile = true
 
-    endpoints = {
-      s3 = "http://s3.localhost.localstack.cloud:4566"
-    }
+    ## uncomment when using localstack
+    # endpoints = {
+    #   s3 = "http://s3.localhost.localstack.cloud:4566"
+    # }
   }
 }
 
 provider "aws" {
-  region                      = var.aws_region
-  skip_credentials_validation = true
-  skip_requesting_account_id  = true
+  region = var.aws_region
 
-  endpoints {
-    s3 = "http://s3.localhost.localstack.cloud:4566"
-  }
+  ## uncomment when using localstack
+  # skip_credentials_validation = true
+  # skip_metadata_api_check     = true
+  # skip_requesting_account_id  = true
+
+  # endpoints {
+  #   s3 = "http://s3.localhost.localstack.cloud:4566"
+  # }
 }
 

@@ -6,25 +6,18 @@ terraform {
     }
   }
 
-  # backend "s3" {
-  #   region       = "eu-central-1"
-  #   bucket       = "iac-workshop-bucket-03-01-patrick-state"
-  #   key          = "opentofu-state"
-  #   use_lockfile = true
-
-  #   # endpoints = {
-  #   #   s3 = "http://s3.localhost.localstack.cloud:4566"
-  #   # }
-  # }
+  backend "s3" {
+    region       = "eu-central-1"
+    bucket       = "iac-workshop-bucket-03-01-YOUR-NAME-state"
+    key          = "tofu.tfstate"
+    encrypt      = true
+    use_lockfile = true
+  }
 }
 
 provider "aws" {
-  region                      = var.aws_region
-  # skip_credentials_validation = true
-  # skip_requesting_account_id  = true
+  region = var.aws_region
 
-  # endpoints {
-  #   s3 = "http://s3.localhost.localstack.cloud:4566"
-  # }
+  ## this exercise does not work with the free localstack
 }
 
