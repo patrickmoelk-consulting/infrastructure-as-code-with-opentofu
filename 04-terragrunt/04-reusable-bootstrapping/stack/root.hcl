@@ -7,10 +7,10 @@ remote_state {
   }
 
   config = {
-    bucket = "iac-workshop-04-04-remote-state-name"
+    bucket = "iac-workshop-04-04-remote-state-YOUR-NAME"
 
-    key          = "${path_relative_to_include()}/tofu.tfstate"
     region       = "eu-central-1"
+    key          = "${path_relative_to_include()}/tofu.tfstate"
     encrypt      = true
     use_lockfile = true
 
