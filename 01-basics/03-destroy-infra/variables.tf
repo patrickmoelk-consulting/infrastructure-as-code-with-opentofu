@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "s3_bucket_name" {
   type        = string
   description = "Name of the S3 bucket"
-  default     = "iac-workshop-bucket-03-YOUR-NAME"
+  default     = "iac-workshop-bucket-01-03-YOUR-NAME"
 }
 
 variable "environment" {
