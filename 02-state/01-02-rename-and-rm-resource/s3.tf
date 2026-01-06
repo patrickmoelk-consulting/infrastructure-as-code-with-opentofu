@@ -1,5 +1,5 @@
 locals {
-  bucket_name = "${var.s3_bucket_name}-${data.local_command.name.stdout}"
+  bucket_name = replace("${var.s3_bucket_name}-${data.local_command.name.stdout}", "\n", "")
 }
 
 data "local_command" "name" {
