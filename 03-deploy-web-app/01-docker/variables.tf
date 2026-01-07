@@ -15,5 +15,5 @@ variable "docker_image_backend" {
 }
 
 variable "docker_socket" {
-  description = "path to docker socker, e.g. unix:///Users/USERNAME/.docker/run/docker.sock"
+  description = "path to docker socket, e.g. unix:///var/run/docker.sock or on MacOS typically unix:///Users/USERNAME/.docker/run/docker.sock"
 }
