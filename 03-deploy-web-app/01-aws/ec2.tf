@@ -47,7 +47,7 @@ resource "aws_spot_instance_request" "todo-list-app" {
 
   provisioner "local-exec" {
     working_dir = local.local_frontend_path
-    command     = "npm run build"
+    command     = "npm ci; npm run build"
   }
 
   provisioner "file" {

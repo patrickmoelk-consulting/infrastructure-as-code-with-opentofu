@@ -8,7 +8,7 @@ resource "docker_container" "todo_list_frontend" {
 
   provisioner "local-exec" {
     working_dir = local.local_frontend_path
-    command     = "npm run build"
+    command     = "npm ci; npm run build"
   }
 
   upload {
