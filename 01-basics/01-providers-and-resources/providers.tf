@@ -14,6 +14,7 @@ provider "aws" {
   # WARNING: this is bad practice! NEVER commit secrets to version control! We'll address this later.
   access_key = "foo"
   secret_key = "bar"
+  # token = "" # for temporary sessions
 
   ## uncomment when using localstack
   # skip_credentials_validation = true
