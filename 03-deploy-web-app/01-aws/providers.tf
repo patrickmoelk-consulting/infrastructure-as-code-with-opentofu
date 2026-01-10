@@ -6,13 +6,13 @@ terraform {
     }
   }
 
-  backend "s3" {
-    region       = "eu-central-1"
-    bucket       = "iac-workshop-bucket-03-01-YOUR-NAME-state"
-    key          = "tofu.tfstate"
-    encrypt      = true
-    use_lockfile = true
-  }
+  # backend "s3" {
+  #   region       = "eu-central-1"
+  #   bucket       = "iac-workshop-bucket-03-01-YOUR-NAME-state"
+  #   key          = "tofu.tfstate"
+  #   encrypt      = true
+  #   use_lockfile = true
+  # }
 }
 
 provider "aws" {
