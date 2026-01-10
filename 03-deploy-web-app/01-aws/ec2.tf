@@ -73,7 +73,7 @@ resource "aws_spot_instance_request" "todo-list-app" {
 }
 
 resource "aws_key_pair" "todo-list" {
-  key_name   = "todo-list"
+  key_name   = "todo-list-${local.username}"
   public_key = data.local_file.todo-list-public-key.content
 }
 

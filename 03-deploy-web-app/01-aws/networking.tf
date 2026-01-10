@@ -12,7 +12,7 @@ data "aws_subnets" "default" {
 ///////////////////////////////////////////////////////////
 resource "aws_security_group" "todo_list_app" {
   vpc_id = data.aws_vpc.default.id
-  name   = "Todo list app"
+  name   = "Todo list app ${local.username}"
 }
 
 // allow SSH from local IP only
@@ -82,7 +82,7 @@ resource "aws_vpc_security_group_egress_rule" "all_out_ipv6" {
 ///////////////////////////////////////////////////////////
 resource "aws_security_group" "db" {
   vpc_id = data.aws_vpc.default.id
-  name   = "databases"
+  name   = "databases-${local.username}"
 }
 
 // allow access only from todo list app security group, only on port 5432
@@ -96,6 +96,6 @@ resource "aws_vpc_security_group_ingress_rule" "db_ingress_from_app" {
 }
 
 resource "aws_db_subnet_group" "db" {
-  name       = "databases"
+  name       = "databases-${local.username}"
   subnet_ids = data.aws_subnets.default.ids
 }
