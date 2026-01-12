@@ -1,7 +1,9 @@
-variable "content" {}
+variable "content" {
+  default = ""
+}
 
 module "file" {
   source = "../../module"
 
-  content = var.content
+  content = var.content != "" ? var.content : "Prod tf content"
 }
