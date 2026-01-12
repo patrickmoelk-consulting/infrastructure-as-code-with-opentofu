@@ -7,7 +7,7 @@ remote_state {
   }
 
   config = {
-    bucket = "iac-workshop-04-05-remote-state-name"
+    bucket = "iac-workshop-04-05-remote-state-NAME"
 
     key          = "${path_relative_to_include()}/tofu.tfstate"
     region       = "eu-central-1"
