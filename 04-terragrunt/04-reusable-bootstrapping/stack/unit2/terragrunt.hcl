@@ -7,5 +7,5 @@ terraform {
 }
 
 inputs = {
-  content = "Dev content"
+  content = "Prod tg content"
 }
