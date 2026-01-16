@@ -16,6 +16,10 @@ variable "ec2_public_key_local_filepath" {
   type = string
 }
 
+variable "ec2_private_key_local_filepath" {
+  type = string
+}
+
 
 variable "db_instance_class" {
   default = "db.t3.micro"

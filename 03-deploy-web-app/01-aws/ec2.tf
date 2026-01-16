@@ -22,7 +22,8 @@ resource "aws_spot_instance_request" "todo-list-app" {
     type  = "ssh"
     user  = local.remote_user
     host  = self.public_dns
-    agent = true
+    private_key = file(var.ec2_private_key_local_filepath)  # BAD PRACTICE: only works for private keys without password protection!
+    # agent = true  # use for best practice instead of private_key (line above)
   }
 
   provisioner "remote-exec" {
