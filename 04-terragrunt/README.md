@@ -2,7 +2,7 @@
 
 This chapter of the workshop is largely inspired by the [Quick Start](https://terragrunt.gruntwork.io/docs/getting-started/quick-start/) and [Overview](https://terragrunt.gruntwork.io/docs/getting-started/overview/) tutorials by Gruntwork, licensed under the MIT License as of [January 18, 2026](https://github.com/gruntwork-io/terragrunt/blob/5c55a5a1604050f7f72b5100544721bceea426f1/LICENSE.txt).
 
-The MIT License (MIT)
+The MIT License (MIT)  
 Copyright (c) 2016 Gruntwork, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
