@@ -7,5 +7,5 @@ terraform {
 }
 
 inputs = {
-  bucket_name = "iac-workshop-04-05-name-2"
+  bucket_name = "iac-workshop-04-05-YOUR-NAME-2"
 }
