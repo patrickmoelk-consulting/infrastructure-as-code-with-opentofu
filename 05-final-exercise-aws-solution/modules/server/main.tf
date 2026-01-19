@@ -19,11 +19,11 @@ resource "aws_spot_instance_request" "todo-list-app" {
   wait_for_fulfillment = true
 
   connection {
-    type  = "ssh"
-    user  = local.remote_user
-    host  = self.public_dns
-    agent = true
-    # private_key = file(var.private_key_local_filepath)
+    type        = "ssh"
+    user        = local.remote_user
+    host        = self.public_dns
+    private_key = file(var.private_key_local_filepath)
+    # agent = true
   }
 
   provisioner "remote-exec" {
@@ -75,7 +75,7 @@ resource "aws_spot_instance_request" "todo-list-app" {
 
 data "aws_ami" "search" {
   filter {
-    name = "name"
+    name   = "name"
     values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20251022"]
   }
 }
