@@ -28,6 +28,15 @@
   padding: 0.2rem;
 }
 
+.todo-list li span {
+  display: flex;
+  align-items: flex-end;
+}
+
+.todo-list li span label {
+  padding: 0 0.5rem;
+}
+
 .todo-list form {
   padding: 0;
 }
