@@ -1,0 +1,32 @@
+terraform {
+  source = "../../modules/s3-bucket"
+}
+
+remote_state {
+  backend = "s3"
+  generate =  {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
+
+  config = {
+    bucket       = "iac-workshop-bucket-03-05-01-YOUR-NAME-state"
+    region       = "eu-central-1"
+    key          = "tofu.tfstate"
+    encrypt      = true
+    use_lockfile = true
+
+    ## uncomment when using localstack
+    # skip_credentials_validation = true
+    # skip_metadata_api_check     = true
+    # skip_requesting_account_id  = true
+
+    # endpoints = {
+    #   s3 = "http://s3.localhost.localstack.cloud:4566"
+    # }
+  }
+}
+
+inputs = {
+  bucket_name = "iac-workshop-bucket-03-05-01-YOUR-NAME"
+}
