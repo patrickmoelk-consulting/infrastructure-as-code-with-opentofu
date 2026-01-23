@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-central-1"
+  region = var.aws_region
 
   ## uncomment when using localstack
   # skip_credentials_validation = true
